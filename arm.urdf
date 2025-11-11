@@ -1,0 +1,111 @@
+<robot name = "robot">
+    <link name="base">
+        <inertial>
+            <origin xyz="0 0 0.1" rpy="0 0 0"/>
+            <mass value="100" />
+            <inertia ixx="100" ixy="0" ixz="0" iyy="100" iyz="0" izz="100" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0.1" rpy="0 0 0"/>
+            <geometry>
+                <box size="1 1 0.5" />
+            </geometry>
+            <material name="Cyan">
+                <color rgba="0 1.0 1.0 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0.1" rpy="0 0 0"/>
+            <geometry>
+                <box size="1 1 0.5" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="1" type="revolute">
+       <parent link="base"/>
+       <child  link="shoulder"/>
+       <origin rpy="0 0 0" xyz="0.5 0 0" />
+       <axis xyz="0 0 1"/>
+       <limit effort="0.0" lower="-3.14159" upper="0" velocity="0.0"/>
+    </joint>
+    <link name="shoulder">
+        <inertial>
+            <origin xyz="0.1 1 0" rpy="0 0 0"/>
+            <mass value="1" />
+            <inertia ixx="100" ixy="0" ixz="0" iyy="100" iyz="0" izz="100" />
+        </inertial>
+        <visual>
+            <origin xyz="0.1 1 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.2 2 0.2" />
+            </geometry>
+            <material name="Cyan">
+                <color rgba="0 1.0 1.0 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0.1 1 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.2 2 0.2" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="2" type="revolute">
+       <parent link="shoulder"/>
+       <child  link="forearm"/>
+       <origin rpy="0 0 0" xyz="0 2 0" />
+       <axis xyz="0 0 1"/>
+       <limit effort="0.0" lower="-3.14159" upper="0" velocity="0.0"/>
+    </joint>
+    <link name="forearm">
+        <inertial>
+            <origin xyz="0.1 1 0" rpy="0 0 0"/>
+            <mass value="1" />
+            <inertia ixx="100" ixy="0" ixz="0" iyy="100" iyz="0" izz="100" />
+        </inertial>
+        <visual>
+            <origin xyz="0.1 1 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.2 2 0.2" />
+            </geometry>
+            <material name="Cyan">
+                <color rgba="0 1.0 1.0 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0.1 1 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.2 2 0.2" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="3" type="revolute">
+       <parent link="forearm"/>
+       <child  link="hand"/>
+       <origin rpy="0 0 0" xyz="0 2 0" />
+       <axis xyz="0 0 1"/>
+       <limit effort="0.0" lower="-3.14159" upper="3.14159" velocity="0.0"/>
+    </joint>
+    <link name="hand">
+        <inertial>
+            <origin xyz="0.1 0.1 0" rpy="0 0 0"/>
+            <mass value="1" />
+            <inertia ixx="100" ixy="0" ixz="0" iyy="100" iyz="0" izz="100" />
+        </inertial>
+        <visual>
+            <origin xyz="0.1 0.1 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.2 0.2 0.2" />
+            </geometry>
+            <material name="Cyan">
+                <color rgba="0 1.0 1.0 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0.1 0.1 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.2 0.2 0.2" />
+            </geometry>
+        </collision>
+    </link>
+</robot>
