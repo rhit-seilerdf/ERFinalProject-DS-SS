@@ -11,7 +11,7 @@ p.configureDebugVisualizer(p.COV_ENABLE_GUI, 0)
 p.setGravity(0,0, -9.8)
 
 planeId = p.loadURDF("plane.urdf")
-robotId = p.loadURDF("arm copy.urdf")
+robotId = p.loadURDF("arm.urdf")
 
 
 pyrosim.Prepare_To_Simulate(robotId)
