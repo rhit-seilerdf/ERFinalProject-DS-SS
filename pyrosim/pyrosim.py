@@ -74,10 +74,7 @@ def Prepare_Link_Dictionary(bodyID):
 
         jointName = jointName.decode("utf-8")
 
-        linkName = jointName[1]
-        print("Prepare Links: ",linkName)
-
-        linkNamesToIndices[linkName] = jointIndex
+        linkNamesToIndices[jointName] = jointIndex
 
         if jointIndex==0:
 
