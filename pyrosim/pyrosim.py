@@ -60,6 +60,18 @@ def Get_Touch_Sensor_Value_For_Link(linkName):
 
     return touchValue
 
+def Get_Angle_Of_Joint(robotId, jointName):
+
+    # touchValue = -1.0
+
+    desiredJointIndex = jointNamesToIndices[jointName]
+
+    info = p.getJointState(robotId, desiredJointIndex)
+   
+    # print(info)
+
+    return info[0]
+
 def Prepare_Link_Dictionary(bodyID):
 
     global linkNamesToIndices

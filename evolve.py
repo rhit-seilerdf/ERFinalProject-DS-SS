@@ -13,7 +13,7 @@ p.configureDebugVisualizer(p.COV_ENABLE_GUI,0)
 p.setGravity(0,0,-9.8)
 
 planeId = p.loadURDF("plane.urdf")
-robotId = p.loadURDF("robot.urdf")
+robotId = p.loadURDF("arm.urdf")
 
 pyrosim.Prepare_To_Simulate(robotId)
 
@@ -21,8 +21,8 @@ transient = 1000
 duration = 4000                 
 
 nnsize = 5
-sensor_inputs = 1
-motor_outputs = 2
+sensor_inputs = 3
+motor_outputs = 3
 
 dt = 0.01
 TimeConstMin = 1.0
