@@ -99,7 +99,7 @@ def Arm():
     pyrosim.Start_URDF("arm.urdf")
 
     #Base
-    pyrosim.Send_Cube(name="base", pos=[0,0,0.1], size=[1, 1, 0.5], mass = 10)
+    pyrosim.Send_Cube(name="base", pos=[0,0,0.25], size=[1, 1, 0.5], mass = 10)
 
     # shoulder
     pyrosim.Send_Cube(name="shoulder", pos=[0.6, 2, 0], size=[0.2, 2, 0.2])
