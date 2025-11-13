@@ -13,6 +13,7 @@ p.setGravity(0,0, -9.8)
 
 planeId = p.loadURDF("plane.urdf")
 robotId = p.loadURDF("arm.urdf")
+boxId = p.loadURDF("box.urdf")
 
 
 

@@ -14,6 +14,7 @@ p.setGravity(0,0,-9.8)
 
 planeId = p.loadURDF("plane.urdf")
 robotId = p.loadURDF("arm.urdf")
+boxId = p.loadURDF('box.urdf')
 
 pyrosim.Prepare_To_Simulate(robotId)
 
@@ -80,6 +81,8 @@ def fitnessFunction(genotype):
     posx_start = linkState[0][0]
     posy_start = linkState[0][1]
 
+    box_x, box_y, box_z = p.getBasePositionAndOrientation(boxId)[0]
+
     # Test period
     # Get starting position (after the transient)
     linkState = p.getLinkState(robotId,2)
@@ -89,6 +92,7 @@ def fitnessFunction(genotype):
     posy_current = linkState[0][1]
     posz_current = linkState[0][2]   
 
+    from_box = (((posz_current-box_x)**2) + ((posy_current-box_y)**2))**(1/2)
     distance_traveled = 0.0 # distance traveled in the x-y plane at each step, to be maximized
     distance_jumped = 0.0 # amount of movement up and down, to be minimized
 
@@ -137,6 +141,8 @@ def fitnessFunction(genotype):
         posz_current = linkState[0][2]    
         distance_traveled += np.sqrt((posx_current - posx_past)**2 + (posy_current - posy_past)**2)
         distance_jumped += np.sqrt((posz_current - posz_past)**2)
+
+        from_box = (((posz_current-box_x)**2) + ((posy_current-box_y)**2) + ((posz_current-box_z)**2))**(1/2)
         
 
     linkState = p.getLinkState(robotId,2)
@@ -145,9 +151,9 @@ def fitnessFunction(genotype):
 
     distance_final = np.sqrt((posx_start - posx_end)**2 + (posy_start - posy_end)**2)
 
-    print(distance_final, distance_traveled, distance_jumped)
+    print(from_box, distance_final, distance_traveled, distance_jumped)
 
-    return distance_final + distance_traveled - distance_jumped, output, motorout, sensor1, sensor2, sensor3
+    return -from_box + distance_traveled, distance_final + distance_traveled - distance_jumped, output, motorout, sensor1, sensor2, sensor3
 
 
 
