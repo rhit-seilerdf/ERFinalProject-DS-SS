@@ -106,6 +106,7 @@ def fitnessFunction(genotype):
         motorout[i] = nn.out()
         motoroutput = nn.out()
         p.stepSimulation()
+        # print(motoroutput)
 
         # tp1[i] = np.sin(x * t[i]*2*np.pi) * np.pi/4  
         # tp2[i] = np.cos(x * t[i]*2*np.pi) * np.pi/8
@@ -151,7 +152,7 @@ def fitnessFunction(genotype):
 
     distance_final = np.sqrt((posx_start - posx_end)**2 + (posy_start - posy_end)**2)
 
-    print(from_box, distance_final, distance_traveled, distance_jumped)
+    print(from_box)
 
     return -from_box + distance_traveled, distance_final + distance_traveled - distance_jumped, output, motorout, sensor1, sensor2, sensor3
 

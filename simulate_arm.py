@@ -40,22 +40,29 @@ TimeConstMax = 2.0
 WeightRange = 10.0
 BiasRange = 10.0
 
-transient = 10
-
+transient = 2
 
 nn = ctrnn.CTRNN(nnsize,sensor_inputs,motor_outputs)
 nn.setParameters(genotype,WeightRange,BiasRange,TimeConstMin,TimeConstMax)
 nn.initializeState(np.zeros(nnsize))
 
 for i in range(duration):
-    for i in range(transient):
-        nn.step(dt,[0,0,0])
-        p.stepSimulation()
+    if(i < 10):
+        continue
+    nn.step(dt,[0,0,0])
     p.stepSimulation()
     motoroutput = nn.out()
-    p.stepSimulation()
+    
+    tp1[i] = np.sin(x * t[i]*2*np.pi) * np.pi/4  
+    tp2[i] = np.cos(x * t[i]*2*np.pi) * np.pi/8
 
+    
+    p0_curr = p.getLinkState(robotId, 0)[0]
 
+    print(motoroutput, tp1[i], p0_curr)
+    p0 = motoroutput[0]
+    p1 = motoroutput[1]
+    p2 = motoroutput[2]
 
     pyrosim.Set_Motor_For_Joint(bodyIndex= robotId, 
                                 jointName="1", 
@@ -75,7 +82,7 @@ for i in range(duration):
                                 targetPosition = motoroutput[2],
                                 maxForce = 500
                         )
-        
+    
     time.sleep(1/60)
 
 np.save("sensor1.npy", sensor1)

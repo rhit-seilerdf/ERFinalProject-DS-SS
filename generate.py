@@ -83,7 +83,7 @@ def new_arm():
 
     
     # forearm
-    pyrosim.Send_Joint(name="2",type="revolute", position=[0,2,0], parent="shoulder", child="forearm", axis=[0, 0, 1], upper = "0")
+    pyrosim.Send_Joint(name="2",type="revolute", position=[0,2,0], parent="shoulder", child="forearm", axis=[0, 0, 1])
     pyrosim.Send_Cube(name="forearm", pos=[0.1, 1, 0], size=[0.2, 2, 0.2])
 
     # "hand"
@@ -93,9 +93,9 @@ def new_arm():
     pyrosim.End()
 
 def box():
-    location = random.random() * 4.2
+    xpos = random.random() * 4 - 2
     pyrosim.Start_URDF('box.urdf')
-    pyrosim.Send_Cube('cube', [-location, location, 0.1], [0.2, 0.2, 0.2])
+    pyrosim.Send_Cube('cube', [xpos, -xpos, 0.1], [0.2, 0.2, 0.2])
     pyrosim.End()
 
 
