@@ -92,7 +92,8 @@ def Prepare_Link_Dictionary(bodyID):
 
            rootLinkName = jointName[0]
 
-           linkNamesToIndices[rootLinkName] = -1 
+           linkNamesToIndices[rootLinkName] = -1
+        print(jointName, "  ", jointIndex) 
 
 def Prepare_Joint_Dictionary(bodyID):
 

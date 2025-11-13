@@ -45,9 +45,6 @@ mutatProb = 0.01
 demeSize = 2
 generations = 5
 
-
-
-
 def reset_robot(robotId, base_pos=[0,0,1], base_orn=[0,0,0,1]):
     # Reset base position and orientation
     p.resetBasePositionAndOrientation(robotId, base_pos, base_orn)
@@ -68,7 +65,7 @@ def fitnessFunction(genotype):
     nn.initializeState(np.zeros(nnsize))
 
     for i in range(transient):
-        nn.step(dt,[0])
+        nn.step(dt,[0,0,0])
         p.stepSimulation()
 
     output = np.zeros((duration,nnsize))
@@ -78,13 +75,14 @@ def fitnessFunction(genotype):
     sensor2= np.zeros(duration)
     sensor3= np.zeros(duration)
 
-    linkState = p.getLinkState(robotId,0)
+
+    linkState = p.getLinkState(robotId,2)
     posx_start = linkState[0][0]
     posy_start = linkState[0][1]
 
     # Test period
     # Get starting position (after the transient)
-    linkState = p.getLinkState(robotId,0)
+    linkState = p.getLinkState(robotId,2)
     posx_start = linkState[0][0]
     posy_start = linkState[0][1]
     posx_current = linkState[0][0]
@@ -133,7 +131,7 @@ def fitnessFunction(genotype):
         posx_past = posx_current
         posy_past = posy_current
         posz_past = posz_current   
-        linkState = p.getLinkState(robotId,0)
+        linkState = p.getLinkState(robotId,2) #hand link
         posx_current = linkState[0][0]
         posy_current = linkState[0][1]
         posz_current = linkState[0][2]    
@@ -141,7 +139,7 @@ def fitnessFunction(genotype):
         distance_jumped += np.sqrt((posz_current - posz_past)**2)
         
 
-    linkState = p.getLinkState(robotId,0)
+    linkState = p.getLinkState(robotId,2)
     posx_end = linkState[0][0]
     posy_end = linkState[0][1]
 
@@ -149,7 +147,7 @@ def fitnessFunction(genotype):
 
     print(distance_final, distance_traveled, distance_jumped)
 
-    return distance_final + distance_traveled - distance_jumped, output, motorout, legsensor_hist
+    return distance_final + distance_traveled - distance_jumped, output, motorout, sensor1, sensor2, sensor3
 
 
 

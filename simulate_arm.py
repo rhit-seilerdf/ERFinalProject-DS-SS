@@ -3,6 +3,7 @@ import time
 import pyrosim.pyrosim as pyrosim
 import numpy as np
 import pybullet_data
+import ctrnn
 
 physicsClient = p.connect(p.GUI)
 p.setAdditionalSearchPath(pybullet_data.getDataPath(), 0)
@@ -27,35 +28,52 @@ sensor1= np.zeros(duration)
 sensor2= np.zeros(duration)
 sensor3= np.zeros(duration)
 
+genotype = np.load("bestgenotype.npy")
+nnsize = 5
+sensor_inputs = 3
+motor_outputs = 3
+
+dt = 0.01
+TimeConstMin = 1.0
+TimeConstMax = 2.0
+WeightRange = 10.0
+BiasRange = 10.0
+
+transient = 10
+
+
+nn = ctrnn.CTRNN(nnsize,sensor_inputs,motor_outputs)
+nn.setParameters(genotype,WeightRange,BiasRange,TimeConstMin,TimeConstMax)
+nn.initializeState(np.zeros(nnsize))
+
 for i in range(duration):
+    for i in range(transient):
+        nn.step(dt,[0,0,0])
+        p.stepSimulation()
     p.stepSimulation()
-    if (i > 10):
-        tp1[i] = np.sin(x * t[i]*2*np.pi) * np.pi/4  
-        tp2[i] = np.cos(x * t[i]*2*np.pi) * np.pi/8
-        sensor1[i] = pyrosim.Get_Angle_Of_Joint(robotId, "1")
-        sensor2[i] = pyrosim.Get_Angle_Of_Joint(robotId, "2")
-        sensor3[i] = pyrosim.Get_Angle_Of_Joint(robotId, "3")
+    motoroutput = nn.out()
+    p.stepSimulation()
 
 
 
-        pyrosim.Set_Motor_For_Joint(bodyIndex= robotId, 
-                                    jointName="1", 
-                                    controlMode = p.POSITION_CONTROL,
-                                    targetPosition = tp1[i],
-                                    maxForce = 500
-                            )
-        pyrosim.Set_Motor_For_Joint(bodyIndex= robotId, 
-                                    jointName="2", 
-                                    controlMode = p.POSITION_CONTROL,
-                                    targetPosition = tp1[i],
-                                    maxForce = 500
-                            )
-        pyrosim.Set_Motor_For_Joint(bodyIndex= robotId, 
-                                    jointName="3", 
-                                    controlMode = p.POSITION_CONTROL,
-                                    targetPosition = tp1[i],
-                                    maxForce = 500
-                            )
+    pyrosim.Set_Motor_For_Joint(bodyIndex= robotId, 
+                                jointName="1", 
+                                controlMode = p.POSITION_CONTROL,
+                                targetPosition = motoroutput[0],
+                                maxForce = 500
+                        )
+    pyrosim.Set_Motor_For_Joint(bodyIndex= robotId, 
+                                jointName="2", 
+                                controlMode = p.POSITION_CONTROL,
+                                targetPosition = motoroutput[1],
+                                maxForce = 500
+                        )
+    pyrosim.Set_Motor_For_Joint(bodyIndex= robotId, 
+                                jointName="3", 
+                                controlMode = p.POSITION_CONTROL,
+                                targetPosition = motoroutput[2],
+                                maxForce = 500
+                        )
         
     time.sleep(1/60)
 
