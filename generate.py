@@ -76,27 +76,28 @@ def new_arm():
 
     #Base
     pyrosim.Send_Cube(name="base", pos=[0,0,0.1], size=[1, 1, 0.5], mass = 100)
-
+    max = 3.14159*3/4
+    min = -3.14159*3/4
     # shoulder
-    pyrosim.Send_Joint(name="1",type="revolute", position=[0.5, 0 ,0], parent="base", child="shoulder", axis=[0, 0, 1], upper = "0")
+    pyrosim.Send_Joint(name="1",type="revolute", position=[0.5, 0 ,0], parent="base", child="shoulder", axis=[0, 0, 1],  upper= max, lower=min)
     pyrosim.Send_Cube(name="shoulder", pos=[0.1, 1, 0], size=[0.2, 2, 0.2])
 
     
     # forearm
-    pyrosim.Send_Joint(name="2",type="revolute", position=[0,2,0], parent="shoulder", child="forearm", axis=[0, 0, 1])
+    pyrosim.Send_Joint(name="2",type="revolute", position=[0,2,0], parent="shoulder", child="forearm", axis=[0, 0, 1], upper=max, lower=min)
     pyrosim.Send_Cube(name="forearm", pos=[0.1, 1, 0], size=[0.2, 2, 0.2])
 
     # "hand"
-    pyrosim.Send_Joint(name="3",type="revolute", position=[0,2,0], parent="forearm", child="hand", axis=[0,0,1])
+    pyrosim.Send_Joint(name="3",type="revolute", position=[0,2,0], parent="forearm", child="hand", axis=[0,0,1],  upper=max, lower=min)
     pyrosim.Send_Cube(name="hand", pos=[0.1, 0.1, 0], size=[0.2, 0.2, 0.2])
 
     pyrosim.End()
 
 def box():
-    xpos = random.random() * 4 - 2
+    xpos = (random.random() + 1)
     pyrosim.Start_URDF('box.urdf')
-    pyrosim.Send_Cube('cube', [xpos, -xpos, 0.1], [0.2, 0.2, 0.2])
+    pyrosim.Send_Cube('cube', [-xpos, xpos, 0.1], [0.2, 0.2, 0.2])
     pyrosim.End()
 
-
+# new_arm()
 box()

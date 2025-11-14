@@ -15,8 +15,6 @@ planeId = p.loadURDF("plane.urdf")
 robotId = p.loadURDF("arm.urdf")
 boxId = p.loadURDF("box.urdf")
 
-
-
 pyrosim.Prepare_To_Simulate(robotId)
 
 duration = 10000
@@ -31,7 +29,7 @@ sensor3= np.zeros(duration)
 
 genotype = np.load("bestgenotype.npy")
 nnsize = 5
-sensor_inputs = 3
+sensor_inputs = 4
 motor_outputs = 3
 
 dt = 0.01
@@ -49,20 +47,23 @@ nn.initializeState(np.zeros(nnsize))
 for i in range(duration):
     if(i < 10):
         continue
-    nn.step(dt,[0,0,0])
+
+    angle1 = pyrosim.Get_Angle_Of_Joint(robotId, "1")
+    angle2 = pyrosim.Get_Angle_Of_Joint(robotId, "2")
+    angle3 = pyrosim.Get_Angle_Of_Joint(robotId, "3")
+    box_x, box_y, box_z = p.getBasePositionAndOrientation(boxId)[0]
+    hand_x, hand_y, hand_z = p.getLinkState(robotId,2)
+    dist = (((hand_x-box_x)**2) + ((hand_y-box_y)**2) + ((hand_z-box_z)**2))**(1/2)
+    nn.step(dt,[angle1, angle2, angle3, dist])
     p.stepSimulation()
     motoroutput = nn.out()
-    
-    tp1[i] = np.sin(x * t[i]*2*np.pi) * np.pi/4  
-    tp2[i] = np.cos(x * t[i]*2*np.pi) * np.pi/8
 
-    
     p0_curr = p.getLinkState(robotId, 0)[0]
 
-    print(motoroutput, tp1[i], p0_curr)
-    p0 = motoroutput[0]
-    p1 = motoroutput[1]
-    p2 = motoroutput[2]
+    print(motoroutput, p0_curr)
+    sensor1[i] = motoroutput[0]
+    sensor2[i] = motoroutput[1]
+    sensor3[i] = motoroutput[2]
 
     pyrosim.Set_Motor_For_Joint(bodyIndex= robotId, 
                                 jointName="1", 

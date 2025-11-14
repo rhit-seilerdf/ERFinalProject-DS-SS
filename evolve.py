@@ -5,6 +5,7 @@ import pybullet as p
 import pybullet_data
 import numpy as np
 import time
+import generate
 
 # physicsClient = p.connect(p.GUI) 
 physicsClient = p.connect(p.DIRECT) # NEW
@@ -15,14 +16,13 @@ p.setGravity(0,0,-9.8)
 planeId = p.loadURDF("plane.urdf")
 robotId = p.loadURDF("arm.urdf")
 boxId = p.loadURDF('box.urdf')
-
 pyrosim.Prepare_To_Simulate(robotId)
 
 transient = 1000
 duration = 4000                 
 
 nnsize = 5
-sensor_inputs = 3
+sensor_inputs = 4
 motor_outputs = 3
 
 dt = 0.01
@@ -66,7 +66,7 @@ def fitnessFunction(genotype):
     nn.initializeState(np.zeros(nnsize))
 
     for i in range(transient):
-        nn.step(dt,[0,0,0])
+        nn.step(dt,[0,0,0,0])
         p.stepSimulation()
 
     output = np.zeros((duration,nnsize))
@@ -101,7 +101,7 @@ def fitnessFunction(genotype):
         sensor2[i] = pyrosim.Get_Angle_Of_Joint(robotId, "2")
         sensor3[i] = pyrosim.Get_Angle_Of_Joint(robotId, "3")
         for ttt in range(10):
-            nn.step(dt,[sensor1[i], sensor2[i], sensor3[i]])
+            nn.step(dt,[sensor1[i], sensor2[i], sensor3[i], from_box])
         output[i] = nn.Output
         motorout[i] = nn.out()
         motoroutput = nn.out()
@@ -154,19 +154,21 @@ def fitnessFunction(genotype):
 
     print(from_box)
 
-    return -from_box + distance_traveled, distance_final + distance_traveled - distance_jumped, output, motorout, sensor1, sensor2, sensor3
+    return 1/abs(from_box), distance_final + distance_traveled - distance_jumped, output, motorout, sensor1, sensor2, sensor3
 
 
 
 # Evolve and visualize fitness over generations
+runs = 1
+bestByRun = np.zeros([runs, generations])
+# for i in range(runs):
+# generate.box()
 ga = eas.Microbial(fitnessFunction, popsize, genesize, recombProb, mutatProb, demeSize, generations)
 ga.run()
-ga.showFitness()
-
-# Get best evolved network
+# bestByRun[i] = ga.showFitness()
 af,bf,bi = ga.fitStats()    
-
 # Save 
 np.save("bestgenotype.npy",bi)
+# Get best evolved network
 
 p.disconnect() 
