@@ -19,7 +19,7 @@ boxId = p.loadURDF("box.urdf")
 
 pyrosim.Prepare_To_Simulate(robotId)
 
-duration = 1000
+duration = 10000
 t = np.linspace(0,1,num=duration)
 x = 10
 tp1 = np.zeros(duration)

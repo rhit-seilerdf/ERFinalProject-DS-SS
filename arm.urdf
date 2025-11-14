@@ -26,7 +26,7 @@
        <child  link="shoulder"/>
        <origin rpy="0 0 0" xyz="0.5 0 0" />
        <axis xyz="0 0 1"/>
-       <limit effort="0.0" lower="-3.14159" upper="0" velocity="0.0"/>
+    <limit effort="0.0" lower="-6.28318" upper="6.28318" velocity="0.0"/>
     </joint>
     <link name="shoulder">
         <inertial>
@@ -55,7 +55,7 @@
        <child  link="forearm"/>
        <origin rpy="0 0 0" xyz="0 2 0" />
        <axis xyz="0 0 1"/>
-       <limit effort="0.0" lower="-3.14159" upper="3.14" velocity="0.0"/>
+    <limit effort="0.0" lower="-6.28318" upper="6.28318" velocity="0.0"/>
     </joint>
     <link name="forearm">
         <inertial>
@@ -84,7 +84,7 @@
        <child  link="hand"/>
        <origin rpy="0 0 0" xyz="0 2 0" />
        <axis xyz="0 0 1"/>
-       <limit effort="0.0" lower="-3.14159" upper="3.14159" velocity="0.0"/>
+    <limit effort="0.0" lower="-6.28318" upper="6.28318" velocity="0.0"/>
     </joint>
     <link name="hand">
         <inertial>
